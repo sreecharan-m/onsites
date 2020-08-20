@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conway's game of life</title>
+
+<style type="text/css">
+    
+ #fullcontent {
+ 
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+ }
+
+ #in {
+
+    padding: 5px;
+    font-size: 18px;
+    background-color: #000;
+    color: #00ffff;
+    cursor: pointer;
+ } 
+
+ #out {
+
+    padding: 5px;
+    font-size: 18px;
+    background-color: #000;
+    color: #00ffff;
+    cursor: pointer;
+ }  
+
+</style>
+
+</head>
+<body>
+
+    <div id="fullcontent">
+        
+        <canvas id="canvas"></canvas>
+
+        <div style="margin-top: 2vh; font-size: 20px; ">
+            Use spacebar to pause/play the simulation.  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <span><input type="number" id="width" placeholder="width"></span>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <span><input type="number" id="height" placeholder="height">&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp<span><input type="number" id="resolution" placeholder="cell size"></span>&nbsp &nbsp &nbsp &nbsp<button id="plot" onclick="assign();">Plot</button>  </span>
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+    
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    var p = document.getElementById('width');
+    var q = document.getElementById('height');
+    var r = document.getElementById('resolution');
+
+    const dimens = {
+       
+    }
+
+    const state = {
+          pause:0
+    }
+
+    document.addEventListener("keydown",function(event){
+
+    var key = event.keyCode;
+
+    if(key == 32)
+    {
+        if(state.pause == 0)
+        {
+            state.pause=1;
+        }
+        else {
+            state.pause=0;
+        }
+    }
+
+    });
+
+    function assign(){
+     
+         dimens.resol = r.value;
+         dimens.h = q.value;
+         dimens.w = p.value;
+
+         drawlife();
+    }
+
+function drawlife(){
+
+ 
+    var px = dimens.resol;
+    canvas.width = dimens.w;
+    canvas.height =dimens.h;
+
+    let r = dimens.w/dimens.resol;
+    let c = dimens.h/dimens.resol;
+
+
+    function plot() {
+
+        return new Array(r).fill(null).map(()=> new Array(c).fill(null).map(()=>Math.floor(Math.random()*2)));
+    }
+
+    let grid = plot();
+
+    requestAnimationFrame(update);
+
+    function update(){
+ 
+        if(state.pause == 0)
+        {
+            grid = next(grid);
+            render(grid);
+        }
+        
+        requestAnimationFrame(update);
+    }
+
+    function next(grid){
+ 
+       const nextGeneration = grid.map(arr=> [...arr]);
+
+       for(let i=0; i< grid.length; i++)
+       {
+
+         for(let j=0; j< grid[i].length; j++)
+         {
+            const cell = grid[i][j];
+
+            let n=0;
+
+            ///////////checking neighbour cells
+            for(let p=-1; p<2;p++)
+            {
+                for(let q=-1; q<2; q++)
+                {
+                    if(p===0 && q===0)
+                    {
+                        continue;
+                    }
+
+                    let x = i + p;
+                    let y= j + q;
+
+                    if(x>=0 && y>=0 && x<r && y<c)
+                    {
+                        let current = grid[i+p][j+q];
+                        n = n+current;
+                    }
+                }
+            }
+
+            if(cell === 1 && n<2)
+            {
+                nextGeneration[i][j] = 0;
+            }
+            else if(cell ===1 && n>3)
+            {
+                nextGeneration[i][j] = 0;
+            }
+            else if(cell === 0 && n ===3)
+            {
+                nextGeneration[i][j] = 1;
+            }
+         }
+
+       }
+
+       return nextGeneration;
+    }
+
+    function render(grid)
+    {
+
+        for(let i=0; i< grid.length; i++)
+       {
+
+         for(let j=0; j< grid[i].length; j++)
+         {
+             const cell = grid[i][j];
+
+             ctx.beginPath();
+             ctx.rect(i*px, j*px , px , px);
+             ctx.fillStyle = cell ? '#00ffff' : '#000';
+             ctx.fill();
+             ctx.stroke();
+         }
+         
+       }    
+    }
+}    
+
+</script>   
+
+</body>
+</html>
