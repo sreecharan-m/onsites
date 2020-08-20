@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Text editor</title>
+
+<style type="text/css">
+	
+  #fullcontent {
+
+  	width: 100vw;
+  	height: 100vh;
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  	flex-direction: column;
+  }
+  #editor {
+
+  	display: flex;
+  	flex-direction: column;
+  }
+
+  #heading {
+
+  	text-align: center;
+  	font-size: 30px;
+  }
+
+</style>
+
+</head>
+
+<body onload="enableEditMode();">
+
+   <div id="fullcontent">
+
+   	     <div id="heading">My Text Editor</div>
+   	
+         <div id="editor">
+         	
+             <div>
+             	<button onclick="execCmd('bold');"><strong>B</strong></button>
+             	<button onclick="execCmd('italic');" style="margin-right: 20px;"><strong>i</strong></button>
+             	Font Size :<span style="margin-right: 10px;"><input type="range" name="f" id="f" min="1" max="7" value="5" oninput="execCmdfont('fontSize')"; ></span>
+
+             	<button onclick="execCmd('undo');" style="margin-right: 20px;"><strong>U</strong></button>
+
+             </div>
+
+             <iframe name="richTextField" style="width: 1000px; height: 600px;"></iframe>
+
+             <script type="text/javascript">
+
+             	var f = document.getElementById('f');
+             	
+             	function enableEditMode(){
+
+             		richTextField.document.designMode = 'on';
+             	}
+
+             	function execCmd(command){
+
+             		richTextField.document.execCommand(command, false, null);
+             	}
+
+             	function execCmdfont(command){
+
+                    var fv = f.value;
+                    console.log(fv);
+             		richTextField.document.execCommand(command, false, fv);
+             	}
+
+             </script>
+
+         </div>
+
+   </div>     
+
+</body>
+</html>
