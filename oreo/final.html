@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Oreo</title>
+
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,300" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+
+<style type="text/css">
+  
+ #fullcontent {
+
+  width: 100vw;
+  height: 100vh;
+  background-color: #00bfff;
+  color: #fff;
+  font: 18px Open Sans;
+  margin: 0px;
+ }
+
+ body {
+
+  margin: 0px;
+  padding: 0px;
+ }
+
+ #oreo {
+
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+ }
+
+ #left {
+
+  width: 50vw;
+  height: 100%;
+  border-right: 3px solid #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+ }
+
+ #right {
+
+  width: 50vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+ }
+
+ #rightr {
+
+  cursor: pointer;
+  position: absolute;
+  top: 15vh;
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+ }
+
+ .o{
+
+   width: 100%;
+   height: 50px;
+   background-color: #35281e;
+   border-top: 1px solid #000;
+   border-bottom:  1px solid #000;
+   border-radius: 30px;
+ }
+
+ .re{
+
+   width: 100%;
+   height: 50px;
+   background-color: #fff;
+   border-top: 1px solid #35281e;
+   border-bottom:  1px solid #35281e;
+   border-radius: 30px;
+ }
+
+ .props {
+
+  margin-top: 5vh;
+ }
+
+ #string {
+
+  margin-top: 5vh;
+  color: #00bfff;
+  margin-left: 0vw;
+  height: 40px;
+  border-radius: 10px;
+  width: 250px;
+  outline: none;
+  font-size: 23px;
+  text-align: center;
+  color: #000;
+  font-weight: 900;
+ }
+
+ #stack {
+
+  padding: 10px;
+  margin-top: 4vh;
+  background-color: #ff0000;
+  color: #000;
+  font: 22px Open Sans;
+  cursor: pointer;
+ }
+
+
+</style>
+
+</head>
+
+<body>
+
+<div id="fullcontent">
+
+  <div id="oreo">
+    
+         <div id="left">
+          
+           <div id="heading" style="font-size: 38px; font-weight: 900; margin-bottom:4vh;"> Oreo stacking </div>
+
+           <div id="properties">
+            
+             <span>Enter the string in combination of (o) and (re)</span>&nbsp &nbsp &nbsp<input type="text" name="string" id="string">
+
+             <div style="text-align: center;">
+             <button id="stack" onclick="oreos();">Stack 😋</button>
+             </div>
+
+            <div class="props">WIDTH : <span style="margin-top: 10px;"><input type="range" name="wd" id="wd" min="10" max="50" value="25" oninput="sliderchange()" ></span></div>
+
+            <div class="props">HEIGHT : <span style="margin-top: 10px;"><input type="range" name="ht" id="ht" min="30" max="100" value="50" oninput="sliderchange()"></span></div>
+
+           </div>
+
+         </div>
+
+         
+
+         <div id="right">
+          
+          <div id="rightr">
+            
+          </div>     
+
+         </div>
+  </div>    
+
+</div>
+
+<script type="text/javascript">
+  
+  let s =document.getElementById('string');
+  let r =document.getElementById('rightr');
+
+
+  function oreos(){
+
+    var sv = s.value;
+    //let mv = sv.split('o').join(' ');
+    
+    let m = sv.split("");
+    //console.log(mv);
+    console.log(m);
+    
+    for(i=0; i<m.length; )
+    {
+      el= m[i];
+
+      if(el == 'o')
+      {
+        //console.log('hai');
+        var div = document.createElement('div');
+        div.className = 'o';
+        r.appendChild(div);
+        i++;
+      }
+      else {
+        //console.log('bye');
+        var div = document.createElement('div');
+        div.className = 're';
+        r.appendChild(div);
+        i= i+2;
+      }
+   }
+ }
+
+   r.addEventListener('mousedown', mousedown);
+
+   function mousedown(e) {
+
+      let prevX = e.clientX;
+      let prevY = e.clientY;
+      
+      const rect = r.getBoundingClientRect();
+      var arrowX = rect.left + rect.width / 2;
+      var arrowY = rect.top + rect.height / 2;
+
+      window.addEventListener('mousemove', mousemove);
+      window.addEventListener('mouseup', mouseup);
+
+      function mousemove(e) {    
+       
+        let newX = prevX - e.clientX;
+        let newY = prevY - e.clientY;
+
+        const rect = r.getBoundingClientRect();
+
+        r.style.top = rect.top - newY + 'px';
+        r.style.left = rect.left - newX + 'px';
+
+        prevX = e.clientX;
+        prevY = e.clientY;
+    }
+      
+      function mouseup(e) {
+  
+        window.removeEventListener('mousemove', mousemove);
+        window.removeEventListener('mouseup', mouseup);
+   }
+   
+  }
+
+   var wd = document.getElementById('wd');
+   var ht = document.getElementById('ht');
+
+   function sliderchange() {
+
+    var wdv = wd.value;
+    var htv = ht.value;
+
+    r.style.width = wdv + '%';
+
+    let ele = document.getElementsByClassName('o');
+    let elee = document.getElementsByClassName('re');
+
+    console.log(ele);
+       
+    for(i=0; i<ele.length; i++)
+    {
+      ele[i].style.height = htv + 'px';
+    }
+
+    for(i=0; i<elee.length; i++)
+    {
+      elee[i].style.height = htv + 'px';
+    }
+
+   }
+
+</script>
+
+</body>
+
+</html>
