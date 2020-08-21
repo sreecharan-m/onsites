@@ -1,0 +1,3 @@
+This is a to add, update and delete name and roll numbers of people at NITT.
+Added support for search by roll no and name along with autocomplete suggestions using AJAX.
+Added support to find out the department for a given roll number.
